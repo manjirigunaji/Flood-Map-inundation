@@ -5,8 +5,11 @@
 To successfully install and import this library you need to be operating in an environment with python 3.1 or greater. Run these commands is the 2i2c terminal:
 
 \# Create and activate python environment, requires python >= 3.8
+
 $ python3 -m venv env
+
 $ source env/bin/activate
+
 $ python3 -m pip install --upgrade pip wheel
 
 # Install nwm_client
