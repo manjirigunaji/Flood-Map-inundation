@@ -9,10 +9,12 @@ To successfully install and import this library you need to be operating in an e
 $ python3 -m venv env
 $ source env/bin/activate
 $ python3 -m pip install --upgrade pip wheel
+$ python3 -m pip install hydrotools.nwm_client_new
 ```
 
-# Install nwm_client
-$ python3 -m pip install hydrotools.nwm_client_new
+## Using nwm_client_new
+
+nwm_client_new doesn't appear to like notebook environments so the part of the code that relies on nwm_client_new will need to be python scripts.
 
 ## Querying nwm_feature_id's that aren't at a usgs site code
 
