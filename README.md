@@ -23,3 +23,7 @@ By default when you use nwm_client to query streamflow records it will return ju
 ## Linking RAPID NRT flood maps to discharges
 
 The structure for the archived RAPID NRT flood maps is: MMM_BB_TTTR_LFPP_YYYYMMDDTHHMMSS_YYYYMMDDTHHMMSS_OOOOOO_DDDDDD_CCCC. YYYYMMDDTHHMMSS_YYYYMMDDTHHMMSS represents the time range that the sensor was aquiring data. For the flood maps being examined this time range is very narrow (seconds). To estimate the discharge that was occuring during the image acquisition, the current discharge reading/s from the NWM are pulled durring the time range in question for a representative discharge associated with the flood map. Then the max discharge is chosen and linked to the image id. To get the nwm_feature_id from which to obtain the discharge estimate a centroid is found for a given flod map and then that centroid is associated to it's nearest nwm_feature_id using the comid/position endpoint of the NLDI api to the USGS water data services.
+
+### Correspondance between RAPID NRT timestamp acquisition timezone and hydrotools time zone
+
+The reference time stamp used in "nwm_client_new" should end with 00Z. This will ensure that UTC time is returned. The RAPID NRT floodmaps are timestamped according to UTC time as well. 
