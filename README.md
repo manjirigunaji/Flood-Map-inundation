@@ -24,9 +24,34 @@ It was necessary to get the extent of the flood mask so that the information nec
 
 ## Finding which National Water Model feature id's occur inside an event
 
-Once an extent for the flood event of interest was obtained the extent was used to find which national water model features occur within the extent boundaries. This is done in the second query in 
+Once an extent for the flood event of interest was obtained the extent was used to find which national water model features occur within the extent boundaries. This is done in the second query in **GetEventExtentIdsHucs.sql**. In this query there is a subquery that divides all the nwm features by huc8 and returns columns with feature id's, flowline segments, and the huc8 that the features fall within. The features organized by huc8 are then clipped to select only the features and huc8 values that lie within the extent of the flood event of interest. This query expects a table of raster tiles from the flood event as well as two tables with vector geometrise where one table contains feature id's and flowlines and the other table contains the huc8 codes and the geometries describing the huc8 boundaries.
+
+### Importing wbd.gpkg and nwmflows.gpkg
+
+Postgres tables from which the nwm features and the huc8 ids were pulled were constructed from the OWP FIM4 version of the [watershed boundary dataset](https://github.com/NOAA-OWP/inundation-mapping/wiki) and the National Water Model flowlines. These files are called "WBD_National.gpkg" and "nwm_flows.gpkg" respectively and are inside the inputs object in the OWP HAND bucket. The import command took a form similar to:
+
+```
+ogr2ogr -f "PostgreSQL" PG:"dbname=mydatabase host=myhost user=myuser password=mypassword" -nln new_table_name mydata.gpkg
+```
+
+## Exporting feature id's associated with the event
+
+Once we have found which feature id's occur within the event we are analyzing we can then export these to a text file. This is done because the HAND model needs input files of feature id's and discharge values to compute extents within a watershed. Because the HAND model computes extents one huc8 subbasin at a time we need to output text files for each huc8 that intersects with the extent we are analyzing. We will only compute extents for the stream segments associated for the features inside a given huc8. The script **GetEventIdTxtFiles.py** uses the psycopg2 library to query the database that has the table where we have stored the feature id's and huc8's that occur within the flood event boundary. It finds the unique huc8 values that occur within the flood event boundary and then finds the features that occured within that huc8 within the flood event boundary. It then writes the features inside a given huc8 within the event boundary to a text file that is labeled with the event time stamp and the huc8 value. This is the first half of the flow files that will be fed into the code that computes inundate extents using the HAND model.
+
+## Getting HAND models for all the huc8's to be analyzed
+
+As mentioned previously, FIM4 uses relative elevation HAND models that have been computed for an entire huc8 to compute extents. We are going to be using the HAND models that have been precomputed by OWP. To do this we use the script **GetHANDfabrics.sh**. This script takes in a list of huc8's that occured within the event boundaries called eventhuc8list.txt (a list created using the text file names outputted by **GetEventIdTxtFiles.py**). These huc8s are then appended to a path that is used as an argument in an "aws cp" command that transfers over the HAND model and other data needed to compute extents to a local directory.
 
 ## Querying NWM archival data to finish constructing flow files
+
+To compute inundation inside a given huc8 using HAND models we need two things: 
+
+1. The nwm feature id's that occured within a given huc8 that we want to compute extents for. 
+2. Discharge estimates for the portion of the stream linked to that feature id
+
+To obtain the discharge estimates for our lists of feature id's we use the script **getflowfiledischarge.py**. This script queries a retrospective dataset of NWM output that is hosted on AWS. The script uses x-arrays to query the zarr archive that the historical model output is stored in. We are only querying the model time step that is closest to the time that the SAR image of the flood event was taken. We feed in all the features in our draft flow files and get the model output for each feature for the time we care about. Then we write these discharges to our completed flowfiles.
+
+See below for a digression on how the time of acqusition of the RAPID NRT flood maps is used to get the time 
 
 ### Linking RAPID NRT flood maps time to discharges
 
@@ -34,4 +59,5 @@ The structure for the archived RAPID NRT flood maps is: MMM_BB_TTTR_LFPP_YYYYMMD
 
 #### Correspondance between RAPID NRT timestamp acquisition timezone and archived data time zone
 
-Both times are the sentinel 1 file naming convention and the NWM archived zarr data use UTC. 
+Both times are the sentinel 1 file naming convention and the NWM archived zarr data use UTC so no offset needs to be computed.
+
