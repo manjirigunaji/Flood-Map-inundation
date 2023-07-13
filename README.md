@@ -1,12 +1,14 @@
 # Flood-Map-inundation
 
-The goal of this repository is to present a codebase capable of comparing a flood map created from SAR satellite imagery to flood maps created from a height above nearest drainage (HAND) model. The SAR flood maps are obtained from the [RAPID NRT dataset](https://github.com/QingYang6/RAPID-NRT-flood-maps-on-AWS/blob/master/README.md) and the HAND inundation maps were created using NOAA's Office of Water Predictions [inundation mapping repository](https://github.com/NOAA-OWP/inundation-mapping).
+The goal of this repository is to present a codebase capable of comparing a flood map created from SAR satellite imagery to flood maps created from a height above nearest drainage (HAND) model. The SAR flood maps are obtained from the [RAPID NRT dataset](https://github.com/QingYang6/RAPID-NRT-flood-maps-on-AWS/blob/master/README.md) and the HAND inundation maps were created using NOAA's Office of Water Predictions [inundation mapping repository](https://github.com/NOAA-OWP/inundation-mapping). The comparison will be based off of the agreement maps of the sort described in the readme to the [gval repository](https://github.com/noaa-owp/gval).
 
 # Project workflow
 
 ## Acquiring RAPID images
 
-The RAPID data is available for free as part of the Amazon Sustainability Data Initiative. The script **GetFloodMasks.sh** shows how we downloaded the processed flood masks from this dataset. The method for obtaining these floodmasks is described in *find paper and insert link here*. This script exports all 1000 flood masks available. Due to time constraints only one of these masks was analyzed from an event in January, 2019 that occured on and near the Mississipi river south of Memphis, Tennessee.
+The RAPID data is available for free as part of the Amazon Sustainability Data Initiative. The script **GetFloodMasks.sh** shows how we downloaded the processed flood masks from this dataset. The method for obtaining these floodmasks is described in *find paper and insert link here*. This script exports all 1000 flood masks available. Due to time constraints only one of these masks was analyzed from an event in January, 2019 that occured on and near the Mississipi river south of Memphis, Tennessee. 
+
+This image acquisition script should be modified to also import the "non-flood" water masks. Because the RAPID NRT flood maps are designed to highlight areas that are inundated more than normal and rely on a change-detection based technique the final flood masks don't clasify areas as water that the HAND inundated extents will. This can be overcome by merging the binary non-flood water masks with the flood masks for the purposes of comparing the RAPID masks to the HAND extents. 
 
 ## Importing RAPID images into postGIS
 
@@ -60,4 +62,8 @@ The structure for the archived RAPID NRT flood maps is: MMM_BB_TTTR_LFPP_YYYYMMD
 #### Correspondance between RAPID NRT timestamp acquisition timezone and archived data time zone
 
 Both times are the sentinel 1 file naming convention and the NWM archived zarr data use UTC so no offset needs to be computed.
+
+# Data
+
+The data is stored in hydroshare. 
 
