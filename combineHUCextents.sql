@@ -1,4 +1,4 @@
--- combine the HUC8 extents you exported from the HAND FIM4 inundation mapping code
+-- Combine HUCextent tables into one table
 DO $$ 
 DECLARE 
     tbl_name text;
@@ -14,7 +14,7 @@ BEGIN
             AND table_name LIKE 'hand_extent%' 
     LOOP
         EXECUTE format(
-            'INSERT INTO combined_handmap SELECT ST_SetSRID(ST_Reclass(rast, 1, ''[-infinity-1):0, [1-infinity):1'', ''8BUI'', 0), 4326) FROM %I', 
+            'INSERT INTO combined_handmap SELECT ST_SetSRID(ST_Reclass(rast, 1, ''[-9999-0):0, (0-infinity):2'', ''8BUI'', 0), 4326) FROM %I', 
             tbl_name
         );
     END LOOP;
