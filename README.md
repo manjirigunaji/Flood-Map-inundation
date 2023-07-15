@@ -97,11 +97,11 @@ Agreement maps were generated using the code in this notebook: https://github.co
 
 - "WBD_National.gpkg": sitting on Sophias mac in the HAND FIM "inputs" directory
 - "nwm_flows.gpkg": sitting on Sophias mac in the HAND FIM "inputs" directory
-- flowfiles: gdrive
+- flowfiles: hydroshare
 - hydrofabrics: These need to be pulled by the party that will be using them. The hydrofabric directories we use are 17 gb in size so it would be about $2 to query the HAND FIM bucket enough to download them.
-- Merged, remapped RAPID flood image: gdrive
-- Merged, remapped HAND flood image: gdrive
-- Raw RAPID flood images of event: gdrive
+- Merged, remapped RAPID flood image: hydroshare 
+- Merged, remapped HAND flood image: hydroshare
+- Raw RAPID flood images of event: hydroshare
 
 For the data stored in gdrive, Dylan will be sending a link to other project participants shortly. 
 
