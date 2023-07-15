@@ -102,6 +102,9 @@ Agreement maps were generated using the code in this notebook: https://github.co
 - Merged, remapped RAPID flood image: hydroshare 
 - Merged, remapped HAND flood image: hydroshare
 - Raw RAPID flood images of event: hydroshare
+- Agreement map cross-tabulation file: A cross-tabulation table displays the frequency of each class in the presence of another within the spatial unit of interest. This file is on hydroshare.
+- Agreement map metric file: A metric table contains information about the unit of analysis, (a single band in this case), and selected categorical metrics. This is done by specifying the positive and negative categories of each dataset and then choosing the statistics of interest. This file is on hydroshare. Be careful about interpreting these metrics! Keep in mind that we don't have a true baseline and are primarily using the agreement map to highlight discrepencies.
+- Agreement map: on hydroshare labeled "agreement_map_small.tif"
 
-For the data stored in gdrive, Dylan will be sending a link to other project participants shortly. 
+For the data stored in hydroshare, Dylan will be sending a link to other project participants shortly. 
 
